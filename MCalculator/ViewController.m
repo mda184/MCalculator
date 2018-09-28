@@ -127,6 +127,8 @@
     
 }
 
+
+//eventhandlers for operators
 -(IBAction)setOperator:(id)sender
 {
     tagOpValue = [sender tag];
@@ -195,108 +197,30 @@
     
 }
 
-
-//eventhandlers for operators
--(IBAction)setPlus:(id)sender
+//additional functions
+-(IBAction)additionalFunctions:(id)sender
 {
-    if (isOperatorClicked == FALSE)
+    
+    tagOpValue = [sender tag];
+    if (tagOpValue == 15) // 1/x function
     {
-        [self saveFirstNum];
-        opValue = ADD;
-        isOperatorClicked = TRUE;
-    }
-    else if (isOperatorClicked == TRUE && opValue==ADD)
-    {
-        [self saveSecondNum];
-        answer = firstNum + secondNum;
-        numberInput = [NSString stringWithFormat:@"%f",answer];
-        [self printNumber]; //print it on the label
-        firstNum  = answer;
-        secondNum = 0;
-        opValue = ADD;
-        isOperatorClicked = TRUE;
+        if (firstNum ==0) {
+            [self saveFirstNum];
+            answer = 1/firstNum;
+            numberInput = [NSString stringWithFormat:@"%f",answer];
+            [self printNumber]; //print it on the label
+        }
+        else if (firstNum!=0 && secondNum ==0)
+        {
+            [self saveSecondNum];
+            secondNum = 1/secondNum;
+            numberInput = [NSString stringWithFormat:@"%ld",secondNum];
+            [self printNumber]; //print it on the label
+        }
     }
     [self setNumberInput:@""];
-    
 }
 
--(IBAction)setMinus:(id)sender
-{
-    if (isOperatorClicked == FALSE)
-    {
-        [self saveFirstNum];
-        opValue = SUB;
-        isOperatorClicked = TRUE;
-    }
-    else if (isOperatorClicked == TRUE && opValue==SUB)
-    {
-        [self saveSecondNum];
-        answer = firstNum - secondNum;
-        numberInput = [NSString stringWithFormat:@"%f",answer];
-        [self printNumber]; //print it on the label
-        firstNum  = answer;
-        secondNum = 0;
-        opValue = SUB;
-        isOperatorClicked = TRUE;
-    }
-    [self setNumberInput:@""];
-    
-}
-
--(IBAction)setMultiply:(id)sender
-{
-    if (isOperatorClicked == FALSE)
-    {
-        [self saveFirstNum];
-        opValue = MULTIPLY;
-        isOperatorClicked = TRUE;
-    }
-    else if (isOperatorClicked == TRUE && opValue==MULTIPLY)
-    {
-        [self saveSecondNum];
-        answer = firstNum * secondNum;
-        numberInput = [NSString stringWithFormat:@"%f",answer];
-        [self printNumber]; //print it on the label
-        firstNum  = answer;
-        secondNum = 1;
-        opValue = MULTIPLY;
-        isOperatorClicked = TRUE;
-        
-        /*
-         //re-initialize the values
-         
-         [self saveSecondNum];
-         [self saveFirstNum];
-         opValue = ADD;
-         isOperatorClicked = TRUE; */
-    }
-    [self setNumberInput:@""];
-    
-}
-
--(IBAction)setDivide:(id)sender
-{
-    if (isOperatorClicked == FALSE)
-    {
-        [self saveFirstNum];
-        opValue = DIVIDE;
-        isOperatorClicked = TRUE;
-    }
-    else if (isOperatorClicked == TRUE && opValue==DIVIDE)
-    {
-        [self saveSecondNum];
-        answer = firstNum / secondNum;
-        numberInput = [NSString stringWithFormat:@"%f",answer];
-        [self printNumber]; //print it on the label
-        firstNum  = answer;
-        secondNum = 1;
-        opValue = DIVIDE;
-        isOperatorClicked = TRUE;
-    }
-    [self setNumberInput:@""];
-    
-}
-//trial
 //eventhandler for clear
 -(IBAction)clearClicked:(id)sender
 {
@@ -305,6 +229,24 @@
     [self printNumber];
     [self setOpValue:0];
     [self setIsOperatorClicked:FALSE];
+}
+
+//eventhandler for clear
+-(IBAction)deleteClicked:(id)sender
+{
+    if (firstNum!=0 && secondNum == 0)
+    {
+        [self resetValues];
+        [self setNumberInput:@""];
+        [self printNumber];
+        [self setOpValue:0];
+        [self setIsOperatorClicked:FALSE];
+    }
+    else
+        if (firstNum!=0 && secondNum != 0)
+        {
+            secondNum =0;
+        }
 }
 
 -(IBAction)equalPressed:(id)sender
