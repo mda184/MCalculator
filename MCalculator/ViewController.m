@@ -296,7 +296,7 @@
     [self setNumberInput:@""];
     
 }
-
+//trial
 //eventhandler for clear
 -(IBAction)clearClicked:(id)sender
 {
