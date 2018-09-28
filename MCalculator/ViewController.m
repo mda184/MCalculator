@@ -7,6 +7,7 @@
 //
 
 #import "ViewController.h"
+#include "math.h"
 
 @interface ViewController ()
 
@@ -19,8 +20,8 @@
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
-    [self setFirstNum:0];
-    [self setSecondNum:0];
+    [self setFirstNum:0.0];
+    [self setSecondNum:0.0];
     [self setAnswer:0.0];
     [self setOpValue:ADD];
     [self setNumberInput:@""];
@@ -40,7 +41,7 @@
 //saving the first number when the operator is clicked
 -(void)saveFirstNum
 {
-    firstNum = [numberInput integerValue];
+    firstNum = [numberInput doubleValue];
     numberInput =@"";
     [self printNumber];
 }
@@ -48,7 +49,7 @@
 //saving the second number after the operator is clicked(including =)
 -(void)saveSecondNum
 {
-    secondNum = [numberInput integerValue];
+    secondNum = [numberInput doubleValue];
     numberInput =@"";
     [self printNumber];
 }
@@ -56,8 +57,8 @@
 //Reset the values
 -(void)resetValues
 {
-    firstNum  = 0;
-    secondNum = 0;
+    firstNum  = 0.0;
+    secondNum = 0.0;
     answer    = 0.0;
     tagValue =100;
     tagOpValue =0;
@@ -193,6 +194,7 @@
         opValue = DIVIDE;
         isOperatorClicked = TRUE;
     }
+    
     [self setNumberInput:@""];
     
 }
@@ -206,18 +208,88 @@
     {
         if (firstNum ==0) {
             [self saveFirstNum];
-            answer = 1/firstNum;
-            numberInput = [NSString stringWithFormat:@"%f",answer];
+            firstNum = 1/firstNum;
+            numberInput = [NSString stringWithFormat:@"%f",firstNum];
             [self printNumber]; //print it on the label
         }
-        else if (firstNum!=0 && secondNum ==0)
+        else if (secondNum==0)
         {
             [self saveSecondNum];
             secondNum = 1/secondNum;
-            numberInput = [NSString stringWithFormat:@"%ld",secondNum];
+            numberInput = [NSString stringWithFormat:@"%f",secondNum];
             [self printNumber]; //print it on the label
         }
     }
+    
+    else
+        if (tagOpValue == 16) // squareroot function
+        {
+            if (firstNum ==0) {
+                [self saveFirstNum];
+                firstNum = sqrt(firstNum);
+                numberInput = [NSString stringWithFormat:@"%f",firstNum];
+                [self printNumber]; //print it on the label
+            }
+            else if (secondNum==0)
+            {
+                [self saveSecondNum];
+                secondNum = sqrt(secondNum);
+                numberInput = [NSString stringWithFormat:@"%f",secondNum];
+                [self printNumber]; //print it on the label
+            }
+        }
+        else
+            if (tagOpValue == 17) // square function
+            {
+                if (firstNum ==0) {
+                    [self saveFirstNum];
+                    firstNum = firstNum * firstNum;
+                    numberInput = [NSString stringWithFormat:@"%f",firstNum];
+                    [self printNumber]; //print it on the label
+                }
+                else if (secondNum==0)
+                {
+                    [self saveSecondNum];
+                    secondNum = secondNum * secondNum;
+                    numberInput = [NSString stringWithFormat:@"%f",secondNum];
+                    [self printNumber]; //print it on the label
+                }
+            }
+    
+            else
+                if (tagOpValue == 18) // cube x^3 function
+                {
+                    if (firstNum ==0) {
+                        [self saveFirstNum];
+                        firstNum = firstNum * firstNum * firstNum;
+                        numberInput = [NSString stringWithFormat:@"%f",firstNum];
+                        [self printNumber]; //print it on the label
+                    }
+                    else if (secondNum==0)
+                    {
+                        [self saveSecondNum];
+                        secondNum = secondNum * secondNum * secondNum;
+                        numberInput = [NSString stringWithFormat:@"%f",secondNum];
+                        [self printNumber]; //print it on the label
+                    }
+                }
+                else
+                    if (tagOpValue == 19) // x^y function
+                    {
+                        if (firstNum ==0) {
+                            [self saveFirstNum];
+                            numberInput = [NSString stringWithFormat:@"%f",firstNum];
+                            [self printNumber]; //print it on the label
+                        }
+                        else if (firstNum!=0 && secondNum==0)
+                        {
+                            [self saveSecondNum];
+                            answer = pow(firstNum, secondNum);
+                            numberInput = [NSString stringWithFormat:@"%f",answer];
+                            [self printNumber]; //print it on the label
+                        }
+                    }
+
     [self setNumberInput:@""];
 }
 
@@ -246,6 +318,7 @@
         if (firstNum!=0 && secondNum != 0)
         {
             secondNum =0;
+            numberInput = [NSString stringWithFormat:@"%f",answer];
         }
 }
 

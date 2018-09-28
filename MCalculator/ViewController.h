@@ -12,11 +12,16 @@
 #define SUB 1
 #define MULTIPLY 2
 #define DIVIDE 3
+#define SQUARE 4
+#define SQUARERT 5
+#define CUBE 6
+#define POW 7
+#define DIVBYX 8
 
 @interface ViewController : UIViewController
 {
-    NSInteger firstNum;
-    NSInteger secondNum;
+    double firstNum;
+    double secondNum;
     double answer;
     bool isOperatorClicked;
     NSInteger opValue;
@@ -26,8 +31,8 @@
     IBOutlet UILabel *displayLabel;
 }
 
-@property NSInteger firstNum;
-@property NSInteger secondNum;
+@property double firstNum;
+@property double secondNum;
 @property NSInteger tagValue;
 @property NSInteger tagOpValue;
 @property double answer;
