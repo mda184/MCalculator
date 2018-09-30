@@ -12,28 +12,25 @@
 #define SUB 1
 #define MULTIPLY 2
 #define DIVIDE 3
-#define SQUARE 4
-#define SQUARERT 5
-#define CUBE 6
-#define POW 7
-#define DIVBYX 8
+#define POW 4
 
 @interface ViewController : UIViewController
 {
-    double firstNum;
-    double secondNum;
-    double answer;
-    bool isOperatorClicked;
-    NSInteger opValue;
-    NSInteger tagValue;
-    NSInteger tagOpValue;
-    NSString *numberInput; //string with the number inputed on the label
-    IBOutlet UILabel *displayLabel;
+    double firstNum; //stores the first double value from the the numberInput when an opertaor is clicked
+    double secondNum;//stores the second double value from the the numberInput when an operator is clicked
+    double answer;//stores the answer after an operation on one or two numbers as a double value
+    bool isOperatorClicked; //if an operator was clicked before
+    NSInteger opValue; //first operator pressed
+    //NSInteger nextOpValue; //if a second operator is pressed
+    NSInteger tagNumValue; //tag for a number button
+    NSInteger tagOpValue; //tag for an operator button
+    NSString *numberInput; //string of the number inputed on the label
+    IBOutlet UILabel *displayLabel; //the label that displays the numbers and the answers
 }
 
 @property double firstNum;
 @property double secondNum;
-@property NSInteger tagValue;
+@property NSInteger tagNumValue;
 @property NSInteger tagOpValue;
 @property double answer;
 @property bool isOperatorClicked;

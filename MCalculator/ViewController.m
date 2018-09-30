@@ -14,35 +14,36 @@
 @end
 
 @implementation ViewController
-@synthesize firstNum,secondNum,tagValue,tagOpValue,answer,opValue,displayLabel,numberInput,isOperatorClicked;
+@synthesize firstNum,secondNum,tagNumValue,tagOpValue,answer,opValue,displayLabel,numberInput,isOperatorClicked;
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
-    [self setFirstNum:0.0];
-    [self setSecondNum:0.0];
-    [self setAnswer:0.0];
-    [self setOpValue:ADD];
-    [self setNumberInput:@""];
-    [self setIsOperatorClicked:FALSE];
-    [self setTagValue:100];
-    [self setTagOpValue:0];
+    [self setFirstNum: 0.0];
+    [self setSecondNum: 0.0];
+    [self setAnswer: 0.0];
+    [self setOpValue: 100];
+    [self setNumberInput: @""];
+    [self setIsOperatorClicked: FALSE];
+    [self setTagNumValue: 100];
+    [self setTagOpValue: 0];
     
     [self printNumber];  //calling the method to initialize it
     
 }
 
+//setting the numberInput on the displaylabel
 -(void)printNumber
 {
-    [displayLabel setText:numberInput]; //setting the numberInput on the displaylabel
+    [displayLabel setText:numberInput];
 }
 
 //saving the first number when the operator is clicked
 -(void)saveFirstNum
 {
     firstNum = [numberInput doubleValue];
-    numberInput =@"";
+    numberInput = @"";
     [self printNumber];
 }
 
@@ -60,8 +61,11 @@
     firstNum  = 0.0;
     secondNum = 0.0;
     answer    = 0.0;
-    tagValue =100;
-    tagOpValue =0;
+    tagNumValue = 100;
+    tagOpValue  = 100;
+    opValue = 100;
+    isOperatorClicked = FALSE;
+    numberInput= @"";
 }
 
 - (void)didReceiveMemoryWarning
@@ -73,58 +77,58 @@
 //eventhandlers for numbers pressed
 -(IBAction)numberPressed:(id)sender
 {
-    tagValue = [sender tag];
-    if (tagValue == 1)
+    tagNumValue = [sender tag];
+    if (tagNumValue == 1)
     {
         numberInput = [numberInput stringByAppendingString:@"1"];
         [self printNumber]; //print it on the label
     }
-    if (tagValue == 2)
+    if (tagNumValue == 2)
     {
         numberInput = [numberInput stringByAppendingString:@"2"];
         [self printNumber]; //print it on the label
     }
-    if (tagValue == 3)
+    if (tagNumValue == 3)
     {
         numberInput = [numberInput stringByAppendingString:@"3"];
         [self printNumber]; //print it on the label
     }
-    if (tagValue == 4)
+    if (tagNumValue == 4)
     {
         numberInput = [numberInput stringByAppendingString:@"4"];
         [self printNumber]; //print it on the label
     }
-    if (tagValue == 5)
+    if (tagNumValue == 5)
     {
         numberInput = [numberInput stringByAppendingString:@"5"];
         [self printNumber]; //print it on the label
     }
-    if (tagValue == 6)
+    if (tagNumValue == 6)
     {
         numberInput = [numberInput stringByAppendingString:@"6"];
         [self printNumber]; //print it on the label
     }
-    if (tagValue == 7)
+    if (tagNumValue == 7)
     {
         numberInput = [numberInput stringByAppendingString:@"7"];
         [self printNumber]; //print it on the label
     }
-    if (tagValue == 8)
+    if (tagNumValue == 8)
     {
         numberInput = [numberInput stringByAppendingString:@"8"];
         [self printNumber]; //print it on the label
     }
-    if (tagValue == 9)
+    if (tagNumValue == 9)
     {
         numberInput = [numberInput stringByAppendingString:@"9"];
         [self printNumber]; //print it on the label
     }
-    if (tagValue == 0)
+    if (tagNumValue == 0)
     {
         numberInput = [numberInput stringByAppendingString:@"0"];
         [self printNumber]; //print it on the label
     }
-    if (tagValue == 10)
+    if (tagNumValue == 10)
     {
         numberInput = [numberInput stringByAppendingString:@"."];
         [self printNumber]; //print it on the label
@@ -133,72 +137,55 @@
 }
 
 
-//eventhandlers for operators
+//eventhandlers for operators +,-,*,/,x^y
 -(IBAction)setOperator:(id)sender
 {
     tagOpValue = [sender tag];
+    
+    //when the first operator is clicked
     if (isOperatorClicked == FALSE)
-    {   if (tagOpValue==10)opValue = ADD;
-        else if (tagOpValue==11)opValue = SUB;
-        else if (tagOpValue==12)opValue = MULTIPLY;
-        else if (tagOpValue==13)opValue = DIVIDE;
+    {
+        //sets the opValue to the current button that was clicked
+        if (tagOpValue==0)opValue = ADD;
+        else if (tagOpValue==1)opValue = SUB;
+        else if (tagOpValue==2)opValue = MULTIPLY;
+        else if (tagOpValue==3)opValue = DIVIDE;
+        else if (tagOpValue==19)opValue = POW;
         
+        //saves the first Number that was put in before the operator was clicked
         [self saveFirstNum];
         isOperatorClicked = TRUE;
     }
     
-    //ADD OPERATOR
-    else if (isOperatorClicked == TRUE && opValue==ADD)
+    //Event handler when second operator is clicked for eg:12+5-1=..
+    else if (isOperatorClicked == TRUE)
     {
+        //12 gets saved
         [self saveSecondNum];
-        answer = firstNum + secondNum;
-        numberInput = [NSString stringWithFormat:@"%f",answer];
+        
+        //checks the previous operator first which is +
+        if (opValue==ADD) firstNum= firstNum +secondNum;
+        else if (opValue==SUB) firstNum= firstNum -secondNum;
+        else if (opValue==MULTIPLY) firstNum= firstNum *secondNum;
+        else if (opValue==DIVIDE) firstNum= firstNum /secondNum;
+        else if (opValue==POW) firstNum = powf(firstNum, secondNum);
+        
+        //displays on the label and stores into a string
+        numberInput = [NSString stringWithFormat:@"%f",firstNum];
         [self printNumber]; //print it on the label
-        firstNum  = answer;
+        
+        //updates the values of the opValue with -
+        if (tagOpValue==0)opValue = ADD;
+        else if (tagOpValue==1)opValue = SUB;
+        else if (tagOpValue==2)opValue = MULTIPLY;
+        else if (tagOpValue==3)opValue = DIVIDE;
+        else if (tagOpValue==19)opValue = POW;
+
+        //resets the values
         secondNum = 0;
-        opValue = ADD;
         isOperatorClicked = TRUE;
     }
-    
-    //MINUS OPERATOR
-    else if (isOperatorClicked == TRUE && opValue==SUB)
-    {
-        [self saveSecondNum];
-        answer = firstNum - secondNum;
-        numberInput = [NSString stringWithFormat:@"%f",answer];
-        [self printNumber]; //print it on the label
-        firstNum  = answer;
-        secondNum = 0;
-        opValue = SUB;
-        isOperatorClicked = TRUE;
-    }
-    
-    //MULTIPLY OPERATOR
-    else if (isOperatorClicked == TRUE && opValue==MULTIPLY)
-    {
-        [self saveSecondNum];
-        answer = firstNum * secondNum;
-        numberInput = [NSString stringWithFormat:@"%f",answer];
-        [self printNumber]; //print it on the label
-        firstNum  = answer;
-        secondNum = 1;
-        opValue = MULTIPLY;
-        isOperatorClicked = TRUE;
-    }
-    
-    //DIVIDE OPERATOR
-    else if (isOperatorClicked == TRUE && opValue==DIVIDE)
-    {
-        [self saveSecondNum];
-        answer = firstNum / secondNum;
-        numberInput = [NSString stringWithFormat:@"%f",answer];
-        [self printNumber]; //print it on the label
-        firstNum  = answer;
-        secondNum = 1;
-        opValue = DIVIDE;
-        isOperatorClicked = TRUE;
-    }
-    
+
     [self setNumberInput:@""];
     
 }
@@ -208,116 +195,33 @@
 {
     
     tagOpValue = [sender tag];
-    if (tagOpValue == 15) // 1/x function
+    
+    if (firstNum == 0)
     {
-        if (firstNum ==0) {
-            [self saveFirstNum];
-            firstNum = 1/firstNum;
-            numberInput = [NSString stringWithFormat:@"%f",firstNum];
-            [self printNumber]; //print it on the label
-        }
-        else if (secondNum==0)
-        {
-            [self saveSecondNum];
-            secondNum = 1/secondNum;
-            numberInput = [NSString stringWithFormat:@"%f",secondNum];
-            [self printNumber]; //print it on the label
-        }
+        [self saveFirstNum];
+        if (tagOpValue ==15) firstNum =1/firstNum;                                  //1/x function
+        else if (tagOpValue ==16) firstNum = sqrt(firstNum);                        //squareroot function
+        else if (tagOpValue ==17) firstNum = firstNum * firstNum;                   //square function
+        else if (tagOpValue ==18) firstNum = firstNum * firstNum * firstNum;        //cube function
+        else if (tagOpValue == 20) firstNum*=-1;                                    // +- function
+        
+        numberInput = [NSString stringWithFormat:@"%f",firstNum];
+        [self printNumber]; //print it on the label
     }
     
-    else
-        if (tagOpValue == 16) // squareroot function
-        {
-            if (firstNum ==0) {
-                [self saveFirstNum];
-                firstNum = sqrt(firstNum);
-                numberInput = [NSString stringWithFormat:@"%f",firstNum];
-                [self printNumber]; //print it on the label
-            }
-            else if (secondNum==0)
-            {
-                [self saveSecondNum];
-                secondNum = sqrt(secondNum);
-                numberInput = [NSString stringWithFormat:@"%f",secondNum];
-                [self printNumber]; //print it on the label
-            }
-        }
-    else
-        if (tagOpValue == 17) // square function
-        {
-            if (firstNum ==0) {
-                [self saveFirstNum];
-                firstNum = firstNum * firstNum;
-                numberInput = [NSString stringWithFormat:@"%f",firstNum];
-                [self printNumber]; //print it on the label
-            }
-            else if (secondNum==0)
-            {
-                [self saveSecondNum];
-                secondNum = secondNum * secondNum;
-                numberInput = [NSString stringWithFormat:@"%f",secondNum];
-                [self printNumber]; //print it on the label
-            }
-        }
-    else
-        if (tagOpValue == 18) // cube x^3 function
-        {
-            if (firstNum ==0) {
-                [self saveFirstNum];
-                firstNum = firstNum * firstNum * firstNum;
-                numberInput = [NSString stringWithFormat:@"%f",firstNum];
-                [self printNumber]; //print it on the label
-            }
-            else if (secondNum==0)
-            {
-                [self saveSecondNum];
-                secondNum = secondNum * secondNum * secondNum;
-                numberInput = [NSString stringWithFormat:@"%f",secondNum];
-                [self printNumber]; //print it on the label
-            }
-        }
-    else
-        if (tagOpValue == 19) // x^y function
-        {
-            if (firstNum ==0) {
-                [self saveFirstNum];
-                numberInput = [NSString stringWithFormat:@"%f",firstNum];
-                [self printNumber]; //print it on the label
-                [self setNumberInput:@""];
-            }
-            else if (secondNum==0)
-            {
-                [self saveSecondNum];
-                answer = powf(firstNum,secondNum);
-                numberInput = [NSString stringWithFormat:@"%f",answer];
-                [self printNumber]; //print it on the label
-            }
-        }
+    else if (secondNum == 0)
+    {
+        [self saveSecondNum];
+        if (tagOpValue ==15) secondNum =1/secondNum;                                //1/x function
+        else if (tagOpValue ==16) secondNum = sqrt(secondNum);                      //squareroot function
+        else if (tagOpValue ==17) secondNum = secondNum * secondNum;                //square function
+        else if (tagOpValue ==18) secondNum = secondNum * secondNum * secondNum;    //cube function
+        else if (tagOpValue == 20) secondNum *= -1;                                 // +- function
+        
+        numberInput = [NSString stringWithFormat:@"%f",secondNum];
+        [self printNumber]; //print it on the label
+    }
     
-    else
-        if (tagOpValue == 20) // +- function
-        {
-            if (firstNum ==0)
-            {
-                [self saveFirstNum];
-                if (firstNum<0 || firstNum>0)
-                {
-                    firstNum*=-1;
-                    numberInput = [NSString stringWithFormat:@"%f",firstNum];
-                    [self printNumber]; //print it on the label
-                }
-            }
-            else if (firstNum!=0 && secondNum==0)
-            {
-                [self saveSecondNum];
-                if (secondNum<0 || secondNum>0)
-                {
-                    secondNum*=-1;
-                    numberInput = [NSString stringWithFormat:@"%f",secondNum];
-                    [self printNumber]; //print it on the label
-                }
-            }
-        }
 }
 
 //eventhandler for clear
@@ -330,22 +234,33 @@
     [self setIsOperatorClicked:FALSE];
 }
 
-//eventhandler for clear
+//eventhandler for delete
 -(IBAction)deleteClicked:(id)sender
 {
-    if (firstNum!=0 && secondNum == 0)
+    if (firstNum==0)
     {
-        [self resetValues];
-        [self setNumberInput:@""];
+        [self saveFirstNum];
+        firstNum = floor(firstNum/10);
+        numberInput = [NSString stringWithFormat:@"%f",firstNum];
+        
+        if (firstNum==0) {
+            [self resetValues];
+            [self printNumber];
+            [self setIsOperatorClicked:FALSE];
+        }
         [self printNumber];
-        [self setOpValue:0];
-        [self setIsOperatorClicked:FALSE];
     }
     else
-        if (firstNum!=0 && secondNum != 0)
+        if (firstNum!=0)
         {
-            secondNum =0;
-            numberInput = [NSString stringWithFormat:@"%f",answer];
+            [self saveSecondNum];
+            secondNum = floor(secondNum/10);
+            numberInput = [NSString stringWithFormat:@"%f",secondNum];
+         
+            if (secondNum ==0) {
+                [self setSecondNum:0];
+            }
+            [self printNumber];
         }
 }
 
@@ -369,6 +284,11 @@
     else if (opValue == DIVIDE) {
         [self saveSecondNum]; //MAYBE TAKE IT OUT AND PUT IT ABOVE
         answer = firstNum / secondNum;
+    }
+    
+    else if (opValue == POW) {
+        [self saveSecondNum]; //MAYBE TAKE IT OUT AND PUT IT ABOVE
+        answer = pow(firstNum, secondNum);
     }
     numberInput = [NSString stringWithFormat:@"%f",answer];
     [self printNumber]; //print it on the label
